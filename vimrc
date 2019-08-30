@@ -1,13 +1,11 @@
 " ========== Vim Basic Settings ============="
 
-
 " Pathogen settings.
 filetype off
 call pathogen#runtime_append_all_bundles()
 execute pathogen#infect()
 filetype plugin indent on
 syntax on
-
 
 " ========================================================================================
 " Make vim incompatbile to vi.
@@ -46,7 +44,7 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 
-set pastetoggle=<F2>
+"set pastetoggle=<F2>
 "set relativenumber
 set number
 set norelativenumber
@@ -100,26 +98,22 @@ nnoremap <leader><space> :noh<cr>
 " ========================================================================================
 " go to next/previous tag
 nnoremap <leader>f :tnext<cr>
-nnoremap <leader>d :tprev<cr>
+"nnoremap <leader>d :tprev<cr>
 nnoremap <leader>tj :tjump<cr>
 
 " ========================================================================================
 " Make Vim to handle long lines nicely.
 set wrap
 set textwidth=79
-set colorcolumn=+1
+"set colorcolumn=+1
 set formatoptions=qrn1
-"set colorcolumn=79
 
 " ========================================================================================
 " To  show special characters in Vim
-"set list
 set listchars=tab:▸\ ,eol:¬
 
 " ========================================================================================
-" set unnamed clipboard
 set clipboard=unnamedplus
-
 
 "==========================================================================="
 " Different search patterns 
@@ -135,7 +129,6 @@ let g:cpp_java_pattern = "*.{cpp,c,h.hpp,java,cc,hh}"
 "==========================================================================="
 "Global project settings 
 let g:project_root = "."
-
 let g:search_root = g:project_root
 let g:search_pattern = "*.*"
 "==========================================================================="
@@ -146,7 +139,7 @@ vnoremap <F1> <ESC>
 
 "==========================================================================="
 " Set vim to save the file on focus out.
-au FocusLost * :wa
+"au FocusLost * :wa
 "==========================================================================="
 " Redraw screen every time when focus gained
 au FocusGained * :redraw!
@@ -164,7 +157,6 @@ nnoremap <leader>q gqip
 
 " ,ev Shortcut to edit .vimrc file on the fly on a vertical window.
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
-
 
 "==========================================================================="
 " Working with split screen nicely
@@ -203,7 +195,6 @@ nnoremap g; g;zz
 
 " =========== END Basic Vim Settings ===========
 
-
 " =========== Gvim Settings =============
 
 " Removing scrollbars
@@ -214,18 +205,18 @@ if has("gui_running")
     set guioptions-=L
     set guioptions+=a
     set guioptions-=m
-    colo badwolf
+    colo kalisi
+    set background=dark
     set listchars=tab:▸\ ,eol:¬         " Invisibles using the Textmate style
 else
     set t_Co=256
-    colorschem badwolf
+    colorschem kalisi
+    set background=dark
 endif
 
 " ========== END Gvim Settings ==========
 
-
 " ========== Plugin Settings =========="
-
 
 " ENABLE CTRL INTERPRETING FOR VIM
 silent !stty -ixon > /dev/null 2>/dev/null
@@ -234,6 +225,7 @@ silent !stty -ixon > /dev/null 2>/dev/null
 " Mapping to NERDTree
 noremap <leader>m :NERDTreeToggle<cr>
 let NERDTreeIgnore=['\.vim$', '\~$', '\.pyc$']
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ================ ReplaceText function ============================
 
@@ -259,10 +251,8 @@ imap <leader>mon <ESC>:split<cr>:vsplit<cr><C-Down>:vsplit<cr><C-Up><leader>li
 nmap <leader>cson   :set spell<CR>
 nmap <leader>csoff  :set nospell<CR>
 
-
 "==========================================================================="
 " Indentation (got to opening bracket and indent section) 
-
 nmap <leader>ip [{=%
 
 "==========================================================================="
@@ -320,8 +310,6 @@ function! OpenQuickFixInRightLocation()
     execute ":TagbarClose"
     execute ":copen"
     execute ":TagbarOpen"
-    " TODO - improve me
-    " go to window one above the quickfix window
     execute ":normal \<C-j>\<C-l>100\<C-j>\<C-k>"
 endfunction
 
@@ -329,9 +317,6 @@ endfunction
 " Improve detecting filetype (ex. for files starting with /bin/echo syntax
 " should be as for sh files)
 function! DetectFileType() 
-    "if did_filetype() 
-      "finish
-    "endif 
     if getline(1) =~ '^#!.*/bin/echo.*'
       setfiletype sh
     endif
@@ -365,10 +350,26 @@ imap <C-F5> <ESC> <C-s> :call BuildAndInstallCSharpApp()<cr>
 nmap <F9>> :set makeprg=make\ -C\ .<cr> :make --no-print-directory <cr> :TagbarClose<cr> :cw <cr> :TagbarOpen <cr>
 imap <F9> <ESC> set makeprg=make\ -C\ ./build<cr> :make --no-print-directory <cr> :TagbarClose<cr> :cw <cr> :TagbarOpen <cr>i
 
-
 "==========================================================================="
 "Tagbar key bindings
 nmap <leader>l <ESC>:TagbarToggle<cr>
+
+" If only 2 windows left, NERDTree and Tag_List, close vim or current tab
+fun! NoExcitingBuffersLeft()
+  if winnr("$") == 3
+    let w1 = bufname(winbufnr(1))
+    let w2 = bufname(winbufnr(2))
+    let w3 = bufname(winbufnr(3))
+    if (exists(":NERDTree")) && (w1 == "__Tag_List__" || w2 == "__Tag_List__" || w3 == "__Tag_List__")
+      if tabpagenr("$") == 1
+        exec 'qa'
+      else
+        exec 'tabclose'
+      endif
+    endif
+  endif
+endfun
+autocmd BufWinLeave * call NoExcitingBuffersLeft()"
 
 "==========================================================================="
 " Mini Buffer some settigns."
@@ -386,8 +387,9 @@ command! Sudowrite w !sudo tee % > /dev/null
 " TAB and Shift-TAB in normal mode cycle buffers
 "
 nmap <Tab> :bn<CR>
-nmap <S-Tab> :bp<CR> 
-
+nmap <S-Tab> :bp<CR>
+" Delete current tab
+nmap <leader>d :bn <CR>:bd #<CR>
 
 "==========================================================================="
 " highlight current line
@@ -416,7 +418,6 @@ noremap <buffer> <silent> K :exe "Man" expand('<cword>') <CR>
 
 "==========================================================================="
 " Map SyntasticCheck to F4 
-"
 noremap <silent> <F4> :SyntasticCheck<CR>
 noremap! <silent> <F4> <ESC>:SyntasticCheck<CR>
 
@@ -434,7 +435,6 @@ function! SetupCandCPPenviron()
     noremap <buffer> <silent> K :exe "Man" 3 expand('<cword>') <CR>
 endfunction
 
-
 "==========================================================================="
 " CCTree configuration
 let g:CCTreeRecursiveDepth = 1
@@ -451,7 +451,6 @@ function! LoadCCTree()
         execute "silent :CCTreeAppendDB ".databaseDir."/dtv_project"
     endif
 endfunction
-
 
 " CCTree shortucts"
 nmap <leader>ct :silent call LoadCCTree()<cr>
@@ -601,8 +600,6 @@ let NERDTreeChDirMode=2
 
 " =========== END Plugin Settings =========="
 "
-"
-
 "==========================================================================="
 " Save and load session
 "
@@ -633,9 +630,7 @@ else
 endif
 
 " =========== Leaving commands =========="
-
 autocmd VimLeave * SessionSaveAs vim_auto_saved_session
-
 
 "============ Configuration Omni Completion =============================="
 
@@ -683,7 +678,6 @@ autocmd FileType vim              let b:comment_leader = '" '
 noremap <silent> <leader>cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
 noremap <silent> <leader>cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>'"'"
 
-
 " ========================================================================================
 " SURRENDINGS 
 
@@ -724,7 +718,6 @@ map <Leader>hof :%!xxd -r<CR>
 
 " ========================================================================================
 " " USING TASKLIST
-" TODO
 map <leader>td <Plug>TaskList
 
 " ========================================================================================
@@ -816,7 +809,9 @@ vmap r <Plug>(expand_region_shrink)
 " https://github.com/bling/vim-airline   
 let g:airline#extensions#tabline#enabled = 1 
 let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|' 
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_theme='dark'
+let g:airline_powerline_fonts = 1
 
 function! AirlineInit()
   let g:airline_section_a = airline#section#create(['mode'])
@@ -868,8 +863,10 @@ noremap - ;
 runtime macros/matchit.vim
 
 " ========================================================================================
-" set F2 as shortcut for toggle INSERT (paste) mode    
-nnoremap <F2> :set invpaste paste?<CR>
+" set F2 for save and exit
+"nnoremap <F2> :set invpaste paste?<CR>
+inoremap <F2> <esc>:wa<CR>
+nnoremap <F2> :wqa<CR>
 
 " ========================================================================================
 " map last substitute execution to normal mode & operator
@@ -883,9 +880,7 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " Trigger a highlight only when pressing f and F.
 let g:qs_highlight_on_keys = ['f', 'F']
-
 let g:qs_first_occurrence_highlight_color = 155       " terminal vim
-
 let g:qs_second_occurrence_highlight_color = 81         " terminal vim
 
 " =======================================================================================
@@ -965,7 +960,7 @@ nmap * *N
 " nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 " 
 " " s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-overwin-f2)
+"nmap s <Plug>(easymotion-overwin-f2)
 " 
 " " Move to line
 " map <Leader><Leader>l <Plug>(easymotion-bd-jk)
@@ -1013,7 +1008,6 @@ nmap <leader><leader>l :CtrlPLocate<cr>
 " visualmarks configuration
 vmap <unique> m <Plug>VisualMarksVisualMark
 nmap <leader>< <Plug>VisualMarksGetVisualMark
-
 
 " " ========================================================================================
 " set mutt-based variables 
