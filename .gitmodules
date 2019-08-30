@@ -1,0 +1,3 @@
+[submodule "vim-kalisi"]
+	path = vim-kalisi
+	url = https://github.com/freeo/vim-kalisi.git

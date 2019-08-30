@@ -1,0 +1,30 @@
+/*************************************************************************************//**
+ *  @file       %FFILE%
+ *
+ *  @brief      Main entry to C-based application  
+ *
+ *  @date       %FDATE%
+ *         
+ **************************************************************************************/
+
+#include <iostream>
+
+using namespace std;
+
+/******** Function ************************************************//**
+ *   @brief     main entry Function
+ *
+ *   @param     argc - number of parameters pass to the application from 
+ *                 command line input (stdin)
+ *   @param     argv - array of parameters pass to the application from 
+ *                 command line input (stdin)
+ *
+ *   @return    exit code of the application
+ *********************************************************************/
+
+int main(int argc, const char **argv)
+{
+    %HERE%    
+    return 0;
+}
+
