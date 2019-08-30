@@ -1,6 +1,3 @@
-[submodule "bundle/vim-kalisi"]
-	path = bundle/vim-kalisi
-	url = https://github.com/freeo/vim-kalisi.git
 [submodule "bundle/tasklist"]
 	path = bundle/tasklist
 	url = https://github.com/vim-scripts/TaskList.vim.git

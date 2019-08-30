@@ -1,7 +1,7 @@
 " ========== Vim Basic Settings ============="
 
-" Pathogen settings.
-filetype off
+""" Pathogen settings.
+""filetype off
 call pathogen#runtime_append_all_bundles()
 execute pathogen#infect()
 filetype plugin indent on
@@ -9,7 +9,7 @@ syntax on
 
 " ========================================================================================
 " Make vim incompatbile to vi.
-set nocompatible
+"set nocompatible
 set modelines=0
 
 " ========================================================================================
@@ -97,14 +97,14 @@ nnoremap <leader><space> :noh<cr>
 
 " ========================================================================================
 " go to next/previous tag
-nnoremap <leader>f :tnext<cr>
+"nnoremap <leader>f :tnext<cr>
 "nnoremap <leader>d :tprev<cr>
 nnoremap <leader>tj :tjump<cr>
 
 " ========================================================================================
 " Make Vim to handle long lines nicely.
 set wrap
-set textwidth=79
+set textwidth=90
 "set colorcolumn=+1
 set formatoptions=qrn1
 
@@ -198,21 +198,21 @@ nnoremap g; g;zz
 " =========== Gvim Settings =============
 
 " Removing scrollbars
-if has("gui_running")
-    set guitablabel=%-0.12t%M
-    set guioptions-=T
-    set guioptions-=r
-    set guioptions-=L
-    set guioptions+=a
-    set guioptions-=m
-    colo kalisi
-    set background=dark
-    set listchars=tab:▸\ ,eol:¬         " Invisibles using the Textmate style
-else
-    set t_Co=256
-    colorschem kalisi
-    set background=dark
-endif
+"if has("gui_running")
+"    set guitablabel=%-0.12t%M
+"    set guioptions-=T
+"    set guioptions-=r
+"    set guioptions-=L
+"    set guioptions+=a
+"    set guioptions-=m
+"    colo pablo
+"    set background=dark
+"    set listchars=tab:▸\ ,eol:¬         " Invisibles using the Textmate style
+"else
+"    set t_Co=256
+"    colorschem pablo
+"    set background=dark
+"endif
 
 " ========== END Gvim Settings ==========
 
@@ -289,37 +289,42 @@ endfunction
 
 "==========================================================================="
 function! BuildAndInstallCppApp()
-    let project_root = FindProjectRoot("main.cpp")
-    if project_root == 0
-        let project_root = "."
-    endif
-    execute "!cd ".project_root."/build; sudo make install;"
+  let project_root = FindProjectRoot("main.cpp")
+  if project_root == 0
+    let project_root = "."
+  endif 
+  " Compile with docker
+  if exists("dmake")
+    execute "!cd ".project_root."/build; make install;"
+  else
+    execute "!cd ".project_root."; dmake --install;"
+  endif
 endfunction
 
 "==========================================================================="
 function! BuildAndInstallCSharpApp()
-    execute "!xbuild;"
+  execute "!xbuild;"
 endfunction
 
 "==========================================================================="
 function! BuildAndInstallQtApp()
-    execute "!make;"
+  execute "!make;"
 endfunction
 
 function! OpenQuickFixInRightLocation() 
-    execute ":TagbarClose"
-    execute ":copen"
-    execute ":TagbarOpen"
-    execute ":normal \<C-j>\<C-l>100\<C-j>\<C-k>"
+  execute ":TagbarClose"
+  execute ":copen"
+  execute ":TagbarOpen"
+  execute ":normal \<C-j>\<C-l>100\<C-j>\<C-k>"
 endfunction
 
 "==========================================================================="
 " Improve detecting filetype (ex. for files starting with /bin/echo syntax
 " should be as for sh files)
 function! DetectFileType() 
-    if getline(1) =~ '^#!.*/bin/echo.*'
-      setfiletype sh
-    endif
+  if getline(1) =~ '^#!.*/bin/echo.*'
+    setfiletype sh
+  endif
 endfunction
 
 "==========================================================================="
@@ -880,8 +885,8 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " Trigger a highlight only when pressing f and F.
 let g:qs_highlight_on_keys = ['f', 'F']
-let g:qs_first_occurrence_highlight_color = 155       " terminal vim
-let g:qs_second_occurrence_highlight_color = 81         " terminal vim
+"let g:qs_first_occurrence_highlight_color = 155       " terminal vim
+"let g:qs_second_occurrence_highlight_color = 81         " terminal vim
 
 " =======================================================================================
 " yankring
@@ -893,9 +898,9 @@ let g:yankring_replace_n_pkey = '<leader>yp'
 " vimdiff options
 " Always use vertical diffs 
 set diffopt+=vertical
-if &diff 
-    colorscheme badwolf_diff
-endif
+"if &diff 
+"    colorscheme badwolf_diff
+"endif
 
 " ========================================================================================
 " ack and silversearcher-ag 
@@ -1116,3 +1121,7 @@ nmap <C-]> g<C-]>
 " ======================================================================================== 
 " rainbow levels toggle
 nmap <leader>rlt :RainbowLevelsToggle<cr>
+
+
+colorscheme kalisi
+set background=dark
