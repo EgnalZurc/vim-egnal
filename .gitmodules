@@ -64,3 +64,6 @@
 [submodule "bundle/vim-abolish"]
 	path = bundle/vim-abolish
 	url = https://github.com/tpope/vim-abolish
+[submodule "syntax/vim-cpp-modern"]
+	path = syntax/vim-cpp-modern
+	url = https://github.com/bfrg/vim-cpp-modern.git

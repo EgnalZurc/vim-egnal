@@ -1,0 +1,1 @@
+vim-cpp-modern/after/syntax/c.vim

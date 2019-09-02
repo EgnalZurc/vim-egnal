@@ -178,6 +178,7 @@ set wildignore+=*.luac "Lua byte code"
 set wildignore+=migrations "Django migrations"
 set wildignore+=*.pyc "Python Object codes"
 set wildignore+=*.orig,*.rej "Merge resolution files"
+set wildignore+=**/build/**
 
 "==========================================================================="
 " Make Sure that Vim returns to the same line when we reopen a file"
@@ -235,7 +236,8 @@ function! MySearchText()
 endfunction
 
 function! MySearchSelectedText(text)
-    :execute "vimgrep /" . a:text . "/jg ".g:search_root."/**/".g:search_pattern
+  "":execute "vimgrep /" . a:text . "/jg ".g:search_root."/**/".g:search_pattern
+  :execute "vimgrep /" . a:text . "/jg ".FindProjectRoot()."/**/".g:search_pattern
 endfunction
 
 map <F3> :call MySearchText() <Bar> botright cw<cr>
@@ -275,24 +277,19 @@ vmap <Leader>P "+P
 nmap <Leader>v V
 
 "==========================================================================="
-function! FindProjectRoot(lookFor)
-    let pathMaker='%:p'
-    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
-        let pathMaker=pathMaker.':h'
-        let fileToCheck=expand(pathMaker).'/'.a:lookFor
-        if filereadable(fileToCheck)||isdirectory(fileToCheck)
-            return expand(pathMaker)
-        endif
-    endwhile
-    return 0
+function! FindProjectRoot()
+  let path=system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+  echom "Project root path: " path
+  return path
 endfunction
 
 "==========================================================================="
 function! BuildAndInstallCppApp()
-  let project_root = FindProjectRoot("main.cpp")
-  if project_root == 0
+  let project_root = FindProjectRoot()
+  if project_root == ""
     let project_root = "."
   endif 
+  echom "Compiling path: " project_root
   " Compile with docker
   if exists("dmake")
     execute "!cd ".project_root."/build; make install;"
