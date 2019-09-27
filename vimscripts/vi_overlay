@@ -4,7 +4,7 @@ import os
 import sys
 import re
 
-VIM_EXEC="/usr/bin/vim.default"
+VIM_EXEC="/usr/bin/vi"
 
 def split_match_result_and_get_vimcommand(match_result, split_separator):
     filename = match_result.group().split(split_separator)[0]
