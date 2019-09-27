@@ -64,7 +64,7 @@ while true; do
         echo -e "/usr/bin/vi.default uses now /etc/alternatives/vi..."
       else
         sudo mv /usr/bin/vi /usr/bin/vi.default
-        echo -e "/usr/bin/vi is now /usr/bin/vi.default..."
+        echo -e "/usr/bin/vi moved to /usr/bin/vi.default..."
       fi
       # create vim.default
       if [ -f /etc/alternatives/vim ]; then 
@@ -72,7 +72,7 @@ while true; do
         echo -e "/usr/bin/vim.default uses now /etc/alternatives/vim..."
       else
         sudo mv /usr/bin/vim /usr/bin/vim.default
-        echo -e "/usr/bin/vim is now /usr/bin/vim.default..."
+        echo -e "/usr/bin/vim moved to /usr/bin/vim.default..."
       fi
       # copy overlay
       if [ -f $HOME/.vim/vimscripts/vi_overlay ]; then 
