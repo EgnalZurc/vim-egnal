@@ -58,19 +58,28 @@ while true; do
   fi 
   case $yn in 
     [Yy]* ) echo -e "Yes selected";
+      # create vi.default
       if [ -f /etc/alternatives/vi ]; then 
         sudo ln -sf /etc/alternatives/vi /usr/bin/vi.default
         echo -e "/usr/bin/vi.default uses now /etc/alternatives/vi..."
+      else
+        sudo mv /usr/bin/vi /usr/bin/vi.default
+        echo -e "/usr/bin/vi is now /usr/bin/vi.default..."
       fi
+      # create vim.default
       if [ -f /etc/alternatives/vim ]; then 
         sudo ln -sf /etc/alternatives/vim /usr/bin/vim.default 
         echo -e "/usr/bin/vim.default uses now /etc/alternatives/vim..."
+      else
+        sudo mv /usr/bin/vim /usr/bin/vim.default
+        echo -e "/usr/bin/vim is now /usr/bin/vim.default..."
       fi
+      # copy overlay
       if [ -f $HOME/.vim/vimscripts/vi_overlay ]; then 
-        echo -e "Using $HOME/.vim/vimscripts/vi_overlay as bin..."
         sudo ln -sf $VIM_ROOT/vimscripts/vi_overlay /usr/bin/vi
-        sudo ln -sf $VIM_ROOT/vimscripts/vi_overlay /usr/bin/vim 
+        sudo ln -sf $VIM_ROOT/vimscripts/vim_overlay /usr/bin/vim 
         sudo chmod +x $VIM_ROOT/vimscripts/vi_overlay
+        echo -e "Using $HOME/.vim/vimscripts/vi_overlay as bin..."
       else 
         echo -e "WARNING!!! $HOME/.vim/vimscripts/vi_overlay does not exist..."
       fi
