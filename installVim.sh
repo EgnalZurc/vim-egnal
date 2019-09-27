@@ -58,28 +58,23 @@ while true; do
   fi 
   case $yn in 
     [Yy]* ) echo -e "Yes selected";
-      if [ -f /usr/bin/vi.default ]; then 
-        sudo rm -r /usr/bin/vi.default
+      if [ -f /etc/alternatives/vi ]; then 
+        sudo ln -sf /etc/alternatives/vi /usr/bin/vi.default
+        echo -e "/usr/bin/vi.default uses now /etc/alternatives/vi..."
       fi
-      if [ -f /usr/bin/vim.default ]; then 
-        sudo rm -r /usr/bin/vim.default
+      if [ -f /etc/alternatives/vim ]; then 
+        sudo ln -sf /etc/alternatives/vim /usr/bin/vim.default 
+        echo -e "/usr/bin/vim.default uses now /etc/alternatives/vim..."
       fi
-      sudo ln -sf /etc/alternatives/vi /usr/bin/vi.default
-      sudo ln -sf /etc/alternatives/vim /usr/bin/vim.default 
-      if [ -f /usr/bin/vi ]; then 
-        sudo rm /usr/bin/vi 
-      fi 
-      if [ -f /usr/bin/vim ]; then 
-        sudo rm /usr/bin/vim 
-      fi 
       if [ -f $HOME/.vim/vimscripts/vi_overlay ]; then 
-        sudo ln -s $VIM_ROOT/vimscripts/vi_overlay /usr/bin/vi
-        sudo ln -s $VIM_ROOT/vimscripts/vi_overlay /usr/bin/vim 
+        echo -e "Using $HOME/.vim/vimscripts/vi_overlay as bin..."
+        sudo ln -sf $VIM_ROOT/vimscripts/vi_overlay /usr/bin/vi
+        sudo ln -sf $VIM_ROOT/vimscripts/vi_overlay /usr/bin/vim 
         sudo chmod +x $VIM_ROOT/vimscripts/vi_overlay
       else 
         echo -e "WARNING!!! $HOME/.vim/vimscripts/vi_overlay does not exist..."
       fi
-      echo -e "vi_overlay installed.";
+      echo -e "vi_overlay installed!!!!";
       break;;
     [Nn]* ) echo -e "No selected"; break;;
     * ) echo -e "Please select yes or no";;
